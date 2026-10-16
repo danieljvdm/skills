@@ -1,6 +1,6 @@
 # Verification
 
-Follow repository testing policy. Use existing checks and direct requests when sufficient; add committed tests only for an authorized or evidenced regression. Choose from the scenarios below based on the changed boundary, rather than creating a test suite for every endpoint edit.
+Apply repository testing policy and [test selection](../../../testing/SKILL.md) first. Default to existing checks and direct requests. The scenarios below are verification questions, not a required test plan or authorization to add automation. An endpoint change alone does not justify a new test; use failure-first development when an isolated test is warranted.
 
 Test the contract spine at its seams. Use the repository's established Effect test integration and command authority.
 
@@ -20,7 +20,7 @@ An unknown codec is not a valid workaround for a `Schema.Class` or other static 
 
 ## Server tests
 
-- Build every changed group and fail the test if an endpoint handler is missing.
+- Build changed groups through the existing static checks.
 - Provide deterministic test layers for application services and middleware.
 - Prove each handler exposes only errors declared by its endpoint; exercise expected reason mapping and unexpected failure defects separately.
 - Exercise success, declared failure, malformed input, and middleware rejection.
@@ -33,12 +33,12 @@ Use the installed `HttpApiTest` or an in-memory `HttpClient` when available; oth
 
 - Derive the client from the same root API used by the server.
 - Provide every `requiredForClient` middleware with `HttpApiMiddleware.layerClient` and assert that it transforms the request.
-- Assert params, query, headers, payload, and expected errors at least once for every changed request shape.
+- Exercise the request or error path needed to answer the remaining verification question.
 - For Atom clients, select the relevant scenarios from the [Effect Atom testing reference](../atom/effect-atom-testing.md); use a deterministic HTTP layer so request encoding, invalidation, and lifecycle remain observable.
 
-## Completion matrix
+## Optional boundary map
 
-Account for every changed endpoint across these columns:
+For a complex cross-boundary change, this map can help locate an unverified outcome:
 
 | Contract                                         | Middleware                       | Handler/service                  | Client/query/mutation                          | Tests                            |
 | ------------------------------------------------ | -------------------------------- | -------------------------------- | ---------------------------------------------- | -------------------------------- |

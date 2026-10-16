@@ -4,9 +4,9 @@ Model the CLI's public surface as a typed contract. Prefer a small root command,
 
 ```ts
 import { Effect } from "effect";
-import { Argument, Command, Flag } from "effect/unstable/cli";
+import { Argument, Command, Flag } from "effect/cli";
 
-const workspace = Flag.string("workspace").pipe(
+const workspace = Flag.String("workspace").pipe(
   Flag.withAlias("w"),
   Flag.withDescription("Workspace to operate on"),
   Flag.withDefault("personal"),
@@ -15,7 +15,7 @@ const workspace = Flag.string("workspace").pipe(
 const root = Command.make("acme").pipe(
   Command.withSharedFlags({
     workspace,
-    verbose: Flag.boolean("verbose").pipe(
+    verbose: Flag.Boolean("verbose").pipe(
       Flag.withAlias("v"),
       Flag.withDescription("Print diagnostic output"),
     ),
@@ -26,13 +26,13 @@ const root = Command.make("acme").pipe(
 const deploy = Command.make(
   "deploy",
   {
-    environment: Argument.string("environment").pipe(
+    environment: Argument.String("environment").pipe(
       Argument.withDescription("Target environment"),
     ),
-    dryRun: Flag.boolean("dry-run").pipe(
+    dryRun: Flag.Boolean("dry-run").pipe(
       Flag.withDescription("Show the deployment plan without applying it"),
     ),
-    json: Flag.boolean("json").pipe(Flag.withDescription("Print machine-readable JSON")),
+    json: Flag.Boolean("json").pipe(Flag.withDescription("Print machine-readable JSON")),
   },
   Effect.fn("deployCommand")(function* ({ dryRun, environment, json }) {
     const shared = yield* root;
@@ -62,7 +62,7 @@ export const command = root.pipe(Command.withSubcommands([deploy]));
 - Use arguments for essential positional identity and flags for optional behavior. Prefer named flags when position would be ambiguous.
 - Give public commands, arguments, and non-obvious flags descriptions. Add examples for quoting, shared flags, or surprising combinations.
 - Put cross-command inputs in `Command.withSharedFlags`; read them by yielding the parent command instead of duplicating parsing or reading globals.
-- Use `Flag.choice` for closed vocabularies and schemas for structured values loaded from JSON, files, or environment boundaries.
+- Use `Flag.Literals` for closed vocabularies and schemas for structured values loaded from JSON, files, or environment boundaries.
 - Keep aliases additive and unsurprising. Never give two concepts the same short flag in one command path.
 
 ## Interactive and automated use

@@ -20,4 +20,4 @@ When an existing draft PR is the subject, interpret "open it" or "ready it" as m
 
 ## Address review feedback
 
-Use [review feedback](../../dan-mode/references/review-feedback.md) to assess findings from people, models, and automation. For changes you make, reread the revised diff and run the relevant checks, reusing valid evidence. Rewrite the title and body if the scope moved. Keep authorized review replies as self-contained as the PR itself.
+Use [review feedback](review-feedback.md) to assess findings from people, models, and automation. For changes you make, reread the revised diff and run the relevant checks, reusing valid evidence. Rewrite the title and body if the scope moved. Keep authorized review replies as self-contained as the PR itself.

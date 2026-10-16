@@ -1,6 +1,6 @@
 # Cloudflare Workers and effect-cf
 
-Use `effect-cf` to turn Worker bindings and entrypoints into Effect services and layers. Confirm its compatibility with the repository's exact Effect v4 beta.
+Use `effect-cf` to turn Worker bindings and entrypoints into Effect services and layers. Confirm its compatibility with the repository's installed Effect version.
 
 ## Runtime edge
 
@@ -8,7 +8,7 @@ Assemble application services, `HttpApiBuilder` routes, the Effect HTTP platform
 
 ```ts
 import { Effect, Layer } from "effect";
-import { HttpRouter } from "effect/unstable/http";
+import { HttpRouter } from "effect/http";
 import { Worker } from "effect-cf";
 
 const WorkerLive = Layer.mergeAll(ApplicationServicesLive, ApiRoutesLive);

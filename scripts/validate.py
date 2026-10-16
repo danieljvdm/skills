@@ -1,5 +1,6 @@
 """Validate shared skill metadata, invocation policies, and local references."""
 
+import argparse
 from pathlib import Path
 import re
 
@@ -7,7 +8,12 @@ import yaml
 
 
 ROOT = Path(__file__).resolve().parents[1]
-skills = sorted((ROOT / "skills").iterdir())
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("--skills-dir", type=Path, help="Validate installed copies instead of this source tree.")
+parser.add_argument("skills", nargs="*", help="Selected skill names; defaults to all skills in the directory.")
+args = parser.parse_args()
+skill_root = args.skills_dir or ROOT / "skills"
+skills = [skill_root / name for name in args.skills] if args.skills else sorted(skill_root.iterdir())
 
 for skill in skills:
     entrypoint = skill / "SKILL.md"
@@ -25,7 +31,10 @@ for skill in skills:
     assert implicit is (not manual), f"Conflicting invocation policies: {skill}"
 
 links = 0
-for document in [ROOT / "README.md", *sorted((ROOT / "docs").rglob("*.md")), *sorted((ROOT / "skills").rglob("*.md"))]:
+documents = [document for skill in skills for document in sorted(skill.rglob("*.md"))]
+if args.skills_dir is None and not args.skills:
+    documents = [ROOT / "README.md", *sorted((ROOT / "docs").rglob("*.md")), *documents]
+for document in documents:
     for target in re.findall(r"\[[^\]]*\]\(([^)]+)\)", document.read_text()):
         if target.startswith(("https://", "http://", "#")):
             continue

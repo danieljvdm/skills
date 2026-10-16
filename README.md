@@ -28,7 +28,9 @@ Start with [dan-mode](skills/dan-mode/SKILL.md) for the personal working style: 
 
 ## Use
 
-Copy the selected skill directories into the client's skill location, commonly `~/.agents/skills` for personal use or `.agents/skills` for a repository. Keep sibling skills together when following their cross-links. Client discovery paths and invocation syntax vary.
+Copy the selected skill directories into the client's skill location, commonly `~/.agents/skills` for personal use or `.agents/skills` for a repository. Include the supporting skills reached by relative links, including links inside references, so the copy works without a personal installation. Select relevant workflows instead of installing the entire personal stack. Engineering skills do not depend on `dan-mode`.
+
+Client discovery paths and invocation syntax vary. A repository and personal installation can contain the same skill name; do not assume the client merges or consistently prefers one copy. Required repository workflows should link to the exact repository path. Keep intentionally different workflows under distinct names.
 
 `dan-mode` and `simplify` are manual skills. Both their frontmatter and Codex sidecars preserve that policy. In Codex invoke `$dan-mode` or `$simplify`; in Claude Code, Cursor, or Grok use `/dan-mode` or `/simplify`; in OpenCode 2 use `@dan-mode` or `@simplify`. Other skills are available for selection when relevant.
 
@@ -49,5 +51,7 @@ Write normal Markdown paragraphs without manual line wrapping. Keep entrypoints 
 ```sh
 uv run --with pyyaml python scripts/validate.py
 ```
+
+To check selected installed copies and their relative links, use `uv run --with pyyaml python scripts/validate.py --skills-dir /path/to/repo/.agents/skills effect cloudflare`. This checks the named skills without imposing this repository's metadata policy on unrelated third-party skills.
 
 The [principles record](docs/principles.md) explains selected ideas and adaptations from Poteto mode. Skill-specific notices retain upstream authors and licenses; original material uses the root MIT license.
