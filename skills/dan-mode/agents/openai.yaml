@@ -1,0 +1,6 @@
+interface:
+  display_name: "Dan mode"
+  short_description: "Apply Dan's preferred approach to building"
+
+policy:
+  allow_implicit_invocation: false
