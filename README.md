@@ -21,6 +21,7 @@ Start with [dan-mode](skills/dan-mode/SKILL.md) for the personal working style: 
 | [project-setup](skills/project-setup/SKILL.md) | Repository setup and Vite+ tooling |
 | [testing](skills/testing/SKILL.md) | Test selection and design |
 | [pull-requests](skills/pull-requests/SKILL.md) | PR preparation, evidence, review, and publication |
+| [show-me](skills/show-me/SKILL.md) | Focused visual explanations, diagrams, and code-shape sketches |
 | [design-ui](skills/design-ui/SKILL.md) | UI implementation and refinement |
 | [animate](skills/animate/SKILL.md) | Motion and gestures |
 | [orchestrate](skills/orchestrate/SKILL.md) | Independent delegation and model selection |

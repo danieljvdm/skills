@@ -1,6 +1,6 @@
 # Code and test practices
 
-Apply these to upstream library contributions, including Effect-TS/effect and effect-agent, while implementing or revising the change and during final review. Adapt them to the target library's architecture and conventions. The repository's testing policy decides whether to add a test; these rules shape the tests you do write.
+Apply these to library contributions while implementing or revising the change and during final review. Adapt them to the target library's architecture and conventions. The repository's testing policy decides whether to add a test; these rules shape the tests you do write.
 
 ## Keep code precise and focused
 

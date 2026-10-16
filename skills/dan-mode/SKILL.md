@@ -37,6 +37,7 @@ Select only the guidance needed for the current decision. Follow cross-links for
 - Repository or workspace setup and Vite+ tooling: [project-setup](../project-setup/SKILL.md).
 - Test selection, design, or explicitly requested TDD: [testing](../testing/SKILL.md).
 - PR preparation, review, or publication: [pull-requests](../pull-requests/SKILL.md).
+- Explaining behavior, code structure, or alternatives visually: [show-me](../show-me/SKILL.md).
 - Web UI implementation and refinement: [design-ui](../design-ui/SKILL.md).
 - UI motion and gestures: [animate](../animate/SKILL.md).
 - Reusable capabilities and shared packages: [library-first](../library-first/SKILL.md).

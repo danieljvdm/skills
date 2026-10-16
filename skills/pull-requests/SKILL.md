@@ -21,7 +21,7 @@ Make the change and its explanation useful to a reviewer who has not seen the co
 
 Lead with the concrete problem and resulting behavior. Describe the final aggregate diff; omit conversation history, intermediate commits, and abandoned approaches unless they explain a tradeoff that helps assess the result. Simple changes need one or two sentences. Use headings or lists only when complexity or the repository template warrants them.
 
-Show rather than narrate. Like `show-me`, pick the smallest view that makes the change clear (a call tree, component or file tree, small diff, or Mermaid chart) and place it beside the sentence it supports.
+Show rather than narrate. Use [show-me](../show-me/SKILL.md) when a visual helps: pick the smallest view that makes the change clear and place it beside the sentence it supports.
 
 **No validation laundry list.** Keep test and check reporting out of the PR body: no testing sections, checklists, or lists of commands run. Still run the required checks, and state a material failure, risk, limitation, or manual step in one sentence. Evidence that shows behavior is the exception: screenshots, video, and performance tables belong in the body when they help a reviewer see the change.
 
@@ -32,8 +32,9 @@ Put enduring contracts in API comments; remove repeated implementation narration
 - Ownership, data flow, or API changes: [diagrams and examples](references/explanation.md).
 - UI or other visible behavior: [capture and publish evidence](references/evidence.md).
 - Performance claims: [baseline and candidate comparisons](references/explanation.md#performance-claims).
+- Contributions to public packages or upstream projects: [maintainer conventions and public context](references/public-packages.md).
 - Commits, publication, readiness, review feedback, or landing: [PR workflow](references/publication.md).
-- Upstream library contributions (Effect-TS/effect, effect-agent): [code and test practices](references/code-and-tests.md), applied while implementing or revising and during final review.
+- Library contributions: [code and test practices](references/code-and-tests.md), applied while implementing or revising and during final review.
 - Substantial takeovers, behavior changes, or new public APIs: [review pass](references/review.md).
 - When a project or user-level companion skill or `AGENTS.md` has extra PR rules (for example upstream maintainer preferences or rules about private ticket references), load and follow it too.
 
