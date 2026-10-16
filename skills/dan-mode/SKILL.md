@@ -24,10 +24,10 @@ Finish authorized work with proportionate verification under repository test and
 
 Select only the guidance needed for the current decision. Follow cross-links for unresolved questions and reuse loaded instructions. A technology's presence does not require reading its whole skill tree. If a skill is unavailable, use repository guidance and authoritative docs without implicitly installing it.
 
-- Designing domain state, public types, or ownership: [domain modeling](references/domain-modeling.md).
-- Retried operations, recovery, or concurrent writers: [reliable operations](references/reliable-operations.md).
-- Refactors, migrations, or new requirements changing a design: [evolving designs](references/evolving-designs.md).
-- Assessing review comments or suggested changes: [review feedback](references/review-feedback.md).
+- Designing domain state, public types, or ownership: [domain modeling](../library-first/references/domain-modeling.md).
+- Retried operations, recovery, or concurrent writers: [reliable operations](../library-first/references/reliable-operations.md).
+- Refactors, migrations, or new requirements changing a design: [evolving designs](../library-first/references/evolving-designs.md).
+- Assessing review comments or suggested changes: [review feedback](../pull-requests/references/review-feedback.md).
 - A design or behavior decision blocked by empirical uncertainty: [cheap experiments](references/experiments.md).
 
 - Cloudflare runtime or CLI: [cloudflare](../cloudflare/SKILL.md).

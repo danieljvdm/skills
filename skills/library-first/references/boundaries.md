@@ -6,4 +6,4 @@ Move the current reusable workflow behind the API, including invariants and reco
 
 Keep the public surface small and make inputs, results, failures, dependencies, and resource lifetimes explicit. In Effect code, expose Effect operations with concrete error and service requirements, define services at their domain owner, and compose concrete Layers at the owning application or subsystem boundary. Keep runtime execution and Promise conversion at explicit integration edges. Follow the installed guidance, and keep platform adapters separate from reusable logic where that distinction is needed. Consumers use public exports, including inside the same repository.
 
-When shaping domain state and public types, use [domain modeling](../../dan-mode/references/domain-modeling.md). For operations with retries, partial completion, or concurrent writers, use [reliable operations](../../dan-mode/references/reliable-operations.md).
+When shaping domain state and public types, use [domain modeling](domain-modeling.md). For operations with retries, partial completion, or concurrent writers, use [reliable operations](reliable-operations.md).

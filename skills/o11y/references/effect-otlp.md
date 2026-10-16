@@ -1,6 +1,6 @@
 # Effect OTLP
 
-Read the installed Effect `AGENTS.md` and its observability guide first. The snippets below target the APIs in Effect `4.0.0-beta.107`, checked from installed source. Some repositories use newer import paths such as `effect/observability`; match their installed exports instead of upgrading to fit this example. Preserve an existing `@effect/opentelemetry` integration when it already owns the runtime.
+Read the installed Effect `AGENTS.md` and its observability guide first. The snippets below use `effect/http` and `effect/observability`, checked against installed source. Match the repository's installed exports and signatures instead of upgrading to fit this example. Preserve an existing `@effect/opentelemetry` integration when it already owns the runtime.
 
 ## One shared exporter layer
 
@@ -9,8 +9,8 @@ This composition uses Effect's built-in OTLP exporters and JSON serialization. I
 ```ts
 // telemetry.ts
 import { Layer } from "effect";
-import { FetchHttpClient } from "effect/unstable/http";
-import { OtlpLogger, OtlpSerialization, OtlpTracer } from "effect/unstable/observability";
+import { FetchHttpClient } from "effect/http";
+import { OtlpLogger, OtlpSerialization, OtlpTracer } from "effect/observability";
 
 export const ObservabilityLive = Layer.mergeAll(
   OtlpTracer.layerFromConfig(),

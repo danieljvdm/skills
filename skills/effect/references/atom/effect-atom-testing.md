@@ -1,6 +1,6 @@
 # Deterministic Effect Atom testing
 
-Use this reference only when a test is requested or warranted by repository policy. Select the cases that reproduce the relevant failure; this is not a required suite for every changed atom. Existing tests and app verification may already cover the behavior.
+Apply repository testing policy and [test selection](../../../testing/SKILL.md) first. Default to existing checks and app verification. The scenarios below are options for an already justified failure-first test; they are not a matrix to implement for each changed atom or authorization to add tests after implementation.
 
 Test cache policy below React first with `AtomRegistry.make()`. Add a React integration test only when the failure involves provider placement, hook behavior, browser-only SSR boundaries, hydration, or Strict Mode ownership.
 

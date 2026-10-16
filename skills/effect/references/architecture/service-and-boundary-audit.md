@@ -83,15 +83,15 @@ Keep a helper only when it owns domain policy, reusable refinement, repeated non
 
 ## Audit test substitutes
 
-Record the intended test strategy for every production service.
+Apply repository testing policy and [test selection](../../../testing/SKILL.md) before proposing tests or substitutes. Audit existing substitutes only where they affect the requested change; a service does not require its own test strategy document, fake, or test suite.
 
 - Make a shared test Layer's name match the behavior it fully provides.
 - Keep partial fixtures local instead of publishing them as general in-memory implementations.
 - Use a real local adapter when persistence, transactions, serialization, or lifecycle behavior is the subject under test.
 - Keep timing deterministic; never add wall-clock sleeps to stabilize a test.
-- Test protocol round trips when encoding or decoding behavior is a durable, regression-prone public seam.
+- Retain protocol checks for a concrete failure that existing workflow evidence cannot expose; a schema or public seam alone does not justify one.
 
-An explicit production-only rationale is valid when a substitute would not protect durable behavior.
+Default to existing checks and real workflow evidence. Use failure-first development when an isolated test is warranted.
 
 ## Report findings
 

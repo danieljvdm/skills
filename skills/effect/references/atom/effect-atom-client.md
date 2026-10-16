@@ -18,9 +18,9 @@ Create one module-scoped runtime factory and one `AtomHttpApi.Service`. Share a 
 
 ```ts
 import { Effect, Layer } from "effect";
-import { FetchHttpClient, HttpClient, HttpClientRequest } from "effect/unstable/http";
-import { HttpApiMiddleware } from "effect/unstable/httpapi";
-import { Atom, AtomHttpApi } from "effect/unstable/reactivity";
+import { FetchHttpClient, HttpClient, HttpClientRequest } from "effect/http";
+import { HttpApiMiddleware } from "effect/http-api";
+import { Atom, AtomHttpApi } from "effect/reactivity";
 import { ApplicationApi, Authenticate } from "@app/domain";
 
 export const AuthenticateClient = HttpApiMiddleware.layerClient(
@@ -95,7 +95,7 @@ await updateProject({
 
 Successful mutations invalidate matching keys; failed mutations do not. Centralize reactivity-key constructors because mismatched strings fail silently. When one mutation affects several exact keys, flatten their arrays; an array containing key arrays registers those nested arrays as different keys.
 
-Exact array keys invalidate only exact matches. Record-form keys are hierarchical in current Effect v4 implementations: a property registers both its broad name and each `property:id` combination. Confirm this against the installed version before relying on it.
+Exact array keys invalidate only exact matches. Record-form keys are hierarchical in the installed Effect implementation: a property registers both its broad name and each `property:id` combination. Confirm this against the installed version before relying on it.
 
 Choose invalidation breadth from the server write:
 
@@ -109,8 +109,8 @@ Combine invalidation with manual refresh only when two requests are intended. Ke
 
 ```ts
 import { Effect } from "effect";
-import { FetchHttpClient, HttpClientRequest } from "effect/unstable/http";
-import { HttpApiClient, HttpApiMiddleware } from "effect/unstable/httpapi";
+import { FetchHttpClient, HttpClientRequest } from "effect/http";
+import { HttpApiClient, HttpApiMiddleware } from "effect/http-api";
 import { ApplicationApi, Authenticate } from "@app/domain";
 import { AccessToken, AccessTokenLive } from "./AccessToken";
 

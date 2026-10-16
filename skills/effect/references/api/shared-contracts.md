@@ -30,7 +30,7 @@ Use schemas for every external value. Prefer reusable named classes for DTOs, br
 
 ```ts
 import { Schema } from "effect";
-import { HttpApiSchema } from "effect/unstable/httpapi";
+import { HttpApiSchema } from "effect/http-api";
 
 export const ProjectId = Schema.String.pipe(Schema.brand("ProjectId"));
 export type ProjectId = typeof ProjectId.Type;
@@ -57,7 +57,7 @@ Make DTOs describe the wire exactly. If clients receive `id`, expose `id` even w
 An endpoint declares the complete request and response contract inline.
 
 ```ts
-import { HttpApiEndpoint } from "effect/unstable/httpapi";
+import { HttpApiEndpoint } from "effect/http-api";
 import { ProjectDto, ProjectId, ProjectNotFound } from "../../models";
 import { RequestHeaders } from "../headers";
 
@@ -76,7 +76,7 @@ If headers use `Schema.Class`, generated client input may require a constructed 
 ## Compose groups and the root
 
 ```ts
-import { HttpApi, HttpApiGroup } from "effect/unstable/httpapi";
+import { HttpApi, HttpApiGroup } from "effect/http-api";
 import { GetProjectEndpoint, UpdateProjectEndpoint } from "./endpoints";
 
 export const ProjectsApi = HttpApiGroup.make("projects")
