@@ -32,7 +32,15 @@ Copy the selected skill directories into the client's skill location, commonly `
 
 `dan-mode` and `simplify` are manual skills. Both their frontmatter and Codex sidecars preserve that policy. In Codex invoke `$dan-mode` or `$simplify`; in Claude Code, Cursor, or Grok use `/dan-mode` or `/simplify`; in OpenCode 2 use `@dan-mode` or `@simplify`. Other skills are available for selection when relevant.
 
-Dev Kit can distribute these skills through its approved Git catalog, pinned to a commit. Installed copies remain ordinary repository content. Make shared changes here, then advance the consuming catalog and update its copies; preserve intentional local changes during updates. Native agent registrations remain client configuration and can refer to the investigator and reviewer instructions in `orchestrate`.
+Dev Kit distributes these skills through its approved Git catalog, pinned to a commit. Installed copies remain ordinary repository content. Make shared changes here, then update the consuming copies; preserve intentional local changes. Native agent registrations remain client configuration and can refer to the investigator and reviewer instructions in `orchestrate`.
+
+## Updates
+
+Dan's dotfiles provide `skills-update` for personal copies, independent of a Dev Kit release. Preview with `skills-update --dry-run`, then apply the printed commit with `skills-update --ref <commit>`. Supply skill names to update only those skills. Review and commit the resulting files and origin receipts with `cfg`; normal dotfiles sync carries them to other machines. The command preserves locally edited or untracked collisions and leaves unrelated skills alone.
+
+Pushes to `main` that change skills run the [Dev Kit update workflow](.github/workflows/update-dev-kit.yml). It refreshes only `dan-skills`, validates the selected source revision, and opens or updates one catalog PR with a patch changeset. Merging and publishing follow Dev Kit's normal release process. A manual workflow run is also available.
+
+The workflow requires Dev Kit's shared-source integration and `catalog refresh --source` support on its `main` branch. Configure `APP_CLIENT_ID` and `APP_PRIVATE_KEY` in this repository for the existing GitHub App installed on `danieljvdm/dev-kit`, with contents and pull-request write access. The key stays in GitHub Actions secrets; no personal access token or runtime service is required.
 
 ## Maintain
 

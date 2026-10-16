@@ -1,0 +1,98 @@
+name: Update Dev Kit skills
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "skills/**"
+      - ".github/workflows/update-dev-kit.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: update-dev-kit-skills
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Dev Kit
+        uses: actions/checkout@v7
+        with:
+          repository: danieljvdm/dev-kit
+          ref: main
+          path: dev-kit
+          persist-credentials: false
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: dev-kit/package.json
+
+      - name: Set up Vite+ and install dependencies
+        uses: voidzero-dev/setup-vp@v1.16.1
+        with:
+          node-version: "24"
+          working-directory: dev-kit
+          cache: true
+          run-install: |
+            args: ["--frozen-lockfile", "--ignore-scripts"]
+
+      - name: Refresh shared skills
+        id: refresh
+        working-directory: dev-kit
+        run: |
+          vp run dev-kit -- catalog refresh --source dan-skills
+          vp fmt skill-sources.lock.json
+          if ! git diff --quiet -- skill-sources.lock.json; then
+            cat > .changeset/update-shared-skills.md <<'EOF'
+          ---
+          "@danieljvdm/dev-kit": patch
+          ---
+
+          Refresh the shared engineering skills to the latest approved source.
+          EOF
+          fi
+          revision=$(python -c 'import json; print(next(s["resolved"] for s in json.load(open("skill-sources.lock.json"))["sources"] if s["id"] == "dan-skills"))')
+          echo "revision=$revision" >> "$GITHUB_OUTPUT"
+
+      - name: Check out the selected skills revision
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ steps.refresh.outputs.revision }}
+          path: skills
+          persist-credentials: false
+
+      - name: Validate the selected skills revision
+        run: |
+          python -m pip install PyYAML
+          python skills/scripts/validate.py
+
+      - name: Create GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ vars.APP_CLIENT_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: danieljvdm
+          repositories: dev-kit
+          permission-contents: write
+          permission-pull-requests: write
+
+      - name: Create or update catalog PR
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          path: dev-kit
+          branch: automation/shared-skills
+          base: main
+          add-paths: |
+            skill-sources.lock.json
+            .changeset/update-shared-skills.md
+          commit-message: "chore(skills): refresh shared engineering skills"
+          title: "chore(skills): refresh shared engineering skills"
+          body: |
+            Update the shared skills to [${{ steps.refresh.outputs.revision }}](https://github.com/danieljvdm/skills/commit/${{ steps.refresh.outputs.revision }}). Other catalog sources retain their existing pins. Includes a patch changeset for the normal release workflow.
