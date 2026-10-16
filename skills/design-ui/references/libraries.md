@@ -25,7 +25,7 @@ These are Dev Kit defaults, subject to the user's chosen tools and repository co
 | General dashboard charts                                     | [Recharts](https://recharts.org)                                                                             |
 | Drag and drop                                                | [dnd kit](https://dndkit.com)                                                                                |
 | Long-list virtualization                                     | [Virtuoso](https://virtuoso.dev)                                                                             |
-| Shared React state, server queries, mutations, and workflows | Effect Atom; consult the installed Effect documentation and `effect-development` skill when available        |
+| Shared React state, server queries, mutations, and workflows | Effect Atom; consult the installed Effect documentation and [effect](../../effect/SKILL.md) skill when available        |
 | Conditional class names                                      | [clsx](https://github.com/lukeed/clsx)                                                                       |
 | Typed component style variants                               | [CVA](https://cva.style)                                                                                     |
 
