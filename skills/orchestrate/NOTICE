@@ -1,0 +1,6 @@
+The bounded swarm patterns in references/swarms.md adapt workflow ideas from Lauren Tan's pstack swarm skill, distributed under the MIT license in LICENSE.
+
+Source: https://github.com/cursor/plugins/blob/main/pstack/skills/swarm/SKILL.md (reviewed 2026-10-17)
+Copyright (c) 2026 Lauren Tan
+
+Adaptations use native Codex collaboration, flat teams, reusable workers, explicit ownership, and proportionate evidence. docs/principles.md in the source repository records the substantive differences.
