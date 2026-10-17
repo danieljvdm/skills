@@ -24,6 +24,8 @@ Finish authorized work with proportionate verification under repository test and
 
 Select only the guidance needed for the current decision. Follow cross-links for unresolved questions and reuse loaded instructions. A technology's presence does not require reading its whole skill tree. If a skill is unavailable, use repository guidance and authoritative docs without implicitly installing it.
 
+Use independent agents when parallel coverage or competing approaches will materially improve the result. Before a swarm, name the required coverage or the rule for choosing a result. Keep tightly coupled work direct, teams flat, and missing evidence visible. Use the client's native agents within the session's delegation permissions; [orchestrate](../orchestrate/SKILL.md) owns the workflow.
+
 - Designing domain state, public types, or ownership: [domain modeling](../library-first/references/domain-modeling.md).
 - Retried operations, recovery, or concurrent writers: [reliable operations](../library-first/references/reliable-operations.md).
 - Refactors, migrations, or new requirements changing a design: [evolving designs](../library-first/references/evolving-designs.md).
@@ -44,7 +46,7 @@ Select only the guidance needed for the current decision. Follow cross-links for
 - Bugs and unexplained behavior: [debugging](../debugging/SKILL.md).
 - Critical-path changes and performance claims: [measure-performance](../measure-performance/SKILL.md).
 - Slow, duplicated, or missing verification tools: [feedback-loops](../feedback-loops/SKILL.md).
-- Independent delegated work: [orchestrate](../orchestrate/SKILL.md).
+- Independent delegated work, parallel coverage, or competing approaches: [orchestrate](../orchestrate/SKILL.md).
 - A requested simplification pass: [simplify](../simplify/SKILL.md).
 
 - Authoring or reorganizing this stack: [skill structure](references/skill-structure.md).
