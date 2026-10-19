@@ -25,6 +25,7 @@ Start with [dan-mode](skills/dan-mode/SKILL.md) for the personal working style: 
 | [design-ui](skills/design-ui/SKILL.md) | UI implementation and refinement |
 | [animate](skills/animate/SKILL.md) | Motion and gestures |
 | [orchestrate](skills/orchestrate/SKILL.md) | Independent delegation and model selection |
+| [scrawl](skills/scrawl/SKILL.md) | Read screen captures, transcripts, clicks, and drawings from Scrawl |
 
 ## Use
 
@@ -43,6 +44,12 @@ Dan's dotfiles provide `skills-update` for personal copies, independent of a Dev
 Pushes to `main` that change skills run the [Dev Kit update workflow](.github/workflows/update-dev-kit.yml). It refreshes only `dan-skills`, validates the selected source revision, and opens or updates one catalog PR with a patch changeset. Merging and publishing follow Dev Kit's normal release process. A manual workflow run is also available.
 
 The workflow requires Dev Kit's shared-source integration and `catalog refresh --source` support on its `main` branch. Configure `APP_CLIENT_ID` and `APP_PRIVATE_KEY` in this repository for the existing GitHub App installed on `danieljvdm/dev-kit`, with contents and pull-request write access. The key stays in GitHub Actions secrets; no personal access token or runtime service is required.
+
+### Scrawl upstream
+
+[Scrawl](https://github.com/kitlangton/scrawl/tree/main/skills/scrawl) is vendored from Kit Langton's repository with its MIT license. The [daily update workflow](.github/workflows/update-scrawl.yml) checks upstream `main` at 10:23 UTC, validates the skills, and commits changed Scrawl content directly to this repository's `main`. GitHub may delay scheduled runs. The same GitHub App must also be installed on this repository with contents write access; its commits trigger the existing Dev Kit update workflow. Run the Scrawl workflow manually to check immediately.
+
+The skill's `.upstream.json` records the upstream commit and file hashes; unrelated upstream commits produce no update. Source attribution and the Codex sidecar are generated while preserving upstream instructions and invocation policy. Local changes to the imported skill block updates until reconciled. To refresh from a checkout, run `uv run --with pyyaml python scripts/update-scrawl.py`, then the validation command below. Personal installed copies still update through `skills-update`; this workflow updates the canonical repository.
 
 ## Maintain
 
