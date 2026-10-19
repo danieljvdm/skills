@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>Architecture review</title>
+  <style>
+    :root { color-scheme: light; --paper: #f6f5f0; --ink: #202d34; --muted: #56666d; --line: #cfd6d3; --accent: #145f52; --wash: #e6efea; --warm: #934c27; --warm-wash: #f6e9dc; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.6 system-ui, sans-serif; }
+    main { max-width: 1140px; margin: auto; padding: 40px 36px 80px; }
+    header { border-bottom: 1px solid var(--ink); padding-bottom: 32px; }
+    .eyebrow, .kicker, th { font: 600 12px/1.5 ui-monospace, monospace; text-transform: uppercase; letter-spacing: .08em; }
+    .eyebrow { display: flex; justify-content: space-between; gap: 16px; color: var(--accent); }
+    h1 { max-width: 850px; font-size: clamp(32px, 5vw, 56px); line-height: 1.08; letter-spacing: -.04em; margin: 24px 0; font-weight: 650; }
+    h2 { margin: 0 0 16px; font-size: 25px; letter-spacing: -.025em; }
+    h3 { margin: 0 0 8px; font-size: 17px; }
+    h4 { margin: 16px 0 8px; font: 600 12px/1.5 ui-monospace, monospace; color: var(--muted); }
+    p { margin: 0 0 14px; }
+    .lead { max-width: 850px; font-size: 19px; }
+    .muted, figcaption, small { color: var(--muted); }
+    small { font-size: 13px; }
+    a { color: var(--accent); text-underline-offset: 3px; overflow-wrap: anywhere; }
+    a:hover { text-decoration-thickness: 2px; }
+    a:focus-visible, summary:focus-visible { outline: 3px solid var(--warm); outline-offset: 4px; }
+    code { font: 13px/1.5 ui-monospace, monospace; overflow-wrap: anywhere; }
+    section { margin-top: 40px; }
+    .notice { padding: 14px 18px; border-left: 4px solid var(--warm); background: var(--warm-wash); margin-bottom: 24px; }
+    .meta, .metrics, .columns { display: grid; gap: 24px; }
+    .meta { grid-template-columns: repeat(3, 1fr); margin: 24px 0 0; }
+    dt { font: 600 12px/1.5 ui-monospace, monospace; color: var(--muted); text-transform: uppercase; }
+    dd { margin: 4px 0 0; overflow-wrap: anywhere; }
+    .metrics { grid-template-columns: 2fr 1fr; padding: 28px 0; border-bottom: 1px solid var(--line); }
+    .big { display: block; font-size: clamp(30px, 4vw, 46px); line-height: 1.2; font-weight: 650; letter-spacing: -.04em; }
+    .kicker { color: var(--accent); display: block; margin-bottom: 8px; }
+    .columns { grid-template-columns: 1fr 1fr; }
+    ul { padding-left: 22px; margin: 8px 0; }
+    li { margin: 5px 0; }
+    figure { margin: 0 0 24px; }
+    figcaption { font-size: 13px; margin: 8px 0; }
+    .flow { display: flex; gap: 24px; padding: 0; margin: 10px 0; list-style: none; }
+    .flow li { position: relative; flex: 1; min-width: 0; border: 1px solid var(--line); border-radius: 6px; padding: 12px; background: #fffdf8; }
+    .flow li + li::before { content: "→"; position: absolute; left: -21px; top: 16px; color: var(--muted); }
+    .flow strong { display: block; font-size: 14px; line-height: 1.4; }
+    .flow small { display: block; margin-top: 6px; line-height: 1.4; }
+    .flow .remove { border-color: #c08f6d; background: var(--warm-wash); }
+    .flow .collapse { border-color: #7da697; background: var(--wash); }
+    .scroll { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
+    th { color: var(--muted); white-space: nowrap; }
+    th, td { padding: 13px 12px 13px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+    .numeric { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .badge { display: inline-block; padding: 2px 8px; border: 1px solid var(--line); border-radius: 4px; font: 600 11px/1.6 ui-monospace, monospace; text-transform: uppercase; }
+    .recommend { background: var(--wash); color: var(--accent); }
+    .conditional { background: var(--warm-wash); color: var(--warm); }
+    details { border-top: 1px solid var(--line); padding: 18px 0; }
+    details:last-child { border-bottom: 1px solid var(--line); }
+    summary { cursor: pointer; font-size: 19px; font-weight: 600; }
+    summary .badge { margin-left: 12px; vertical-align: middle; }
+    .proposal { padding: 22px 0 8px 20px; }
+    .proposal .columns { margin-bottom: 16px; }
+    .evidence li { margin: 10px 0; }
+    .evidence small { display: block; }
+    .chart { display: grid; gap: 16px; margin: 20px 0; }
+    .chart-row { display: grid; grid-template-columns: 190px 1fr; gap: 18px; }
+    .bar-row { display: grid; grid-template-columns: 60px 1fr 110px; gap: 10px; align-items: center; font-size: 12px; }
+    .track { position: relative; height: 12px; background: #e6e6df; }
+    .extent, .minimum { position: absolute; top: 0; height: 100%; }
+    .extent { opacity: .3; }
+    .deleted { background: var(--accent); }
+    .added { background: var(--warm); }
+    .bar-value { text-align: right; font-variant-numeric: tabular-nums; }
+    .chart-key { font-size: 13px; color: var(--muted); }
+    footer { border-top: 1px solid var(--ink); margin-top: 48px; padding-top: 16px; font-size: 13px; color: var(--muted); }
+    @media (max-width: 700px) {
+      main { padding: 24px 20px 48px; }
+      .meta, .metrics, .columns { grid-template-columns: 1fr; gap: 18px; }
+      .flow { flex-direction: column; gap: 18px; }
+      .flow li + li::before { content: "↓"; top: -23px; left: 18px; }
+      .chart-row { grid-template-columns: 1fr; gap: 4px; }
+      .bar-row { grid-template-columns: 55px 1fr 90px; }
+      .proposal { padding-left: 0; }
+      .eyebrow { flex-direction: column; gap: 4px; }
+    }
+    @media print {
+      body { background: white; font-size: 11px; }
+      main { max-width: none; padding: 0; }
+      h1 { font-size: 32px; }
+      .big { font-size: 28px; }
+      section { margin-top: 24px; }
+      .flow li, tr { break-inside: avoid; }
+      .scroll { overflow: visible; }
+      a { color: inherit; }
+    }
+  </style>
+</head>
+<body>
+  <main id="report"><noscript>This report needs JavaScript to render its embedded review data. No network connection is required.</noscript></main>
+  <!-- Replace this JSON block with revision-specific evidence. All sample data below is fictional. -->
+  <script id="review-data" type="application/json">
+  {
+    "example": true,
+    "title": "One owner for report creation",
+    "repository": "Illustrative project",
+    "base": "example-base",
+    "head": "example-head",
+    "scope": "Report submission through a completed investigation. Example data, not a repository audit.",
+    "summary": "Let the investigation own its result and progress. Remove the duplicate category job and application-owned progress journal; retain native durable execution.",
+    "requirements": ["A submitted report must finish after a worker restart.", "Users must see useful progress and the final category.", "Report reads and writes remain scoped to the authenticated account."],
+    "assumptions": ["Category currently arrives before the final finding. This timing is an observed choice to review, not an independently established requirement.", "The application currently maintains custom progress labels. Useful progress may not require keeping those exact labels or their separate journal."],
+    "architecture": {
+      "current": {
+        "entry": "Authenticated capture saves the report and starts two independent jobs.",
+        "lanes": [
+          {"label": "Category · runs independently of investigation", "nodes": [
+            {"name": "Category queue", "detail": "A · Separate delivery", "state": "remove"},
+            {"name": "Classify", "detail": "A · Separate model", "state": "remove"},
+            {"name": "Save category", "detail": "UI reads early category"}
+          ]},
+          {"label": "Investigation · starts from the same captured report", "nodes": [
+            {"name": "Investigate", "detail": "Native durable execution"},
+            {"name": "Copy progress", "detail": "B · Application journal", "state": "remove"},
+            {"name": "Show result", "detail": "UI joins category and finding"}
+          ]}
+        ],
+        "note": "Native execution resumes interrupted investigations. The UI reads both paths; neither job waits for the other."
+      },
+      "proposed": {
+        "entry": "Same authenticated capture; the investigation owns both the result and its category.",
+        "lanes": [
+          {"label": "Investigation · the only job after A + B", "nodes": [
+            {"name": "Investigate", "detail": "A · Produce category with finding", "state": "collapse"},
+            {"name": "Read checkpoint", "detail": "B · Native progress", "state": "collapse"},
+            {"name": "Show result", "detail": "One authoritative result"}
+          ]}
+        ],
+        "note": "The same native recovery remains. Category now arrives with the finding; that timing change needs a reviewer decision."
+      }
+    },
+    "diagramNote": "Representative success path only. Proposal A changes when the category appears; native restart recovery stays in place.",
+    "proposals": [
+      {
+        "id": "A", "title": "Remove the separate category job", "recommendation": "recommend", "confidence": "Medium · timing needs a product decision",
+        "why": "The investigation already determines the final category. A second model, queue, and lifecycle provide an earlier copy of the same derived value.",
+        "replacement": "Include category in the investigation result and persist it with the finding. Remove the separate dispatcher, consumer, and status reader.",
+        "keepArgument": "The current path can show a category before the investigation finishes. Keep it if an actual consumer requires that timing.",
+        "preserves": "Final category, report ownership, durable investigation, and pending UI.",
+        "tradeoff": "Category appears with the finding. Confirm that timing is acceptable before implementing A.",
+        "verification": "Follow every category reader; compare a completed report and the pending UI before and after the change.",
+        "evidence": [{"label": "example/category-job.ts:1", "evidence": "Illustrative: separate job produces only the category."}, {"label": "example/investigate.ts:80", "evidence": "Illustrative: final finding already includes category."}],
+        "estimates": [{"category": "production", "removed": [480, 620], "added": [40, 80]}, {"category": "tests", "removed": [120, 180], "added": [0, 20]}],
+        "estimateBasis": "Illustrative sizes: job files plus identified dispatcher and reader branches; replacement result mapping is a rough range.",
+        "includeInTotal": true,
+        "countNote": "Independent of B; shared UI cleanup counted here only. Timing tradeoff is part of the recommendation."
+      },
+      {
+        "id": "B", "title": "Read native progress directly", "recommendation": "recommend", "confidence": "High · authoritative owner identified",
+        "why": "The application mirrors events already retained by native execution, creating two mutable descriptions of the same investigation.",
+        "replacement": "Read progress from the native checkpoint through the existing account-authorized endpoint. Keep a small view mapping at that boundary.",
+        "keepArgument": "A separate journal would be needed for progress that native retention cannot cover. In this example, the retained native checkpoint covers the required reconnect window.",
+        "preserves": "Account authorization, pending/error states, reconnect behavior, and native recovery.",
+        "tradeoff": "Custom progress labels become a projection of native events. No measured performance improvement is claimed.",
+        "verification": "Verify pending, completed, failed, and reconnected reports against the same stored investigation in the candidate implementation.",
+        "evidence": [{"label": "example/progress-journal.ts:1", "evidence": "Illustrative: all writers copy native events; native checkpoint retention covers the required reconnect window."}, {"label": "example/report-status.ts:30", "evidence": "Illustrative: one UI reader; ownership check lives outside the journal."}],
+        "estimates": [{"category": "production", "removed": [760, 940], "added": [160, 240]}, {"category": "tests", "removed": [200, 260], "added": [30, 60]}],
+        "estimateBasis": "Illustrative sizes: writer, reader, persistence types, and status adapter; allow replacement code for the native view mapping.",
+        "includeInTotal": true,
+        "countNote": "Disjoint from A; no shared UI cleanup included."
+      },
+      {
+        "id": "C", "title": "Retain native durable execution", "recommendation": "keep", "confidence": "High · explicit requirement",
+        "why": "A worker can stop before an investigation completes. Native execution owns the required restart behavior.",
+        "replacement": "Keep the native owner; remove only the duplicate application machinery in A and B.",
+        "keepArgument": "An ordinary request-scoped call would lose the investigation on interruption.",
+        "preserves": "The required recovery guarantee.", "tradeoff": "Native durable storage and its operational cost remain.",
+        "verification": "Re-use existing restart evidence; verify affected integration boundaries when implementing.",
+        "evidence": [{"label": "example/requirements.md:12", "evidence": "Illustrative: restart recovery is an explicit requirement."}],
+        "estimates": null, "estimateBasis": "No deletion proposed.", "includeInTotal": false, "countNote": "Keep; excluded from deletion totals."
+      },
+      {
+        "id": "D", "title": "Investigate whether the outbox is still needed", "recommendation": "conditional", "confidence": "Low · external consumer not traced",
+        "why": "The outbox may duplicate delivery owned by the native runtime, but its external subscribers have not been established.",
+        "replacement": "Potentially publish from the existing owner; unresolved until delivery guarantees and consumers are traced.",
+        "keepArgument": "External delivery might require atomic persistence with report creation.",
+        "preserves": "Unknown; retain the current path until its contract is understood.", "tradeoff": "Could weaken external delivery if removed incorrectly.",
+        "verification": "Trace subscribers and transactional delivery requirements before recommending deletion.",
+        "evidence": [{"label": "example/outbox.ts:1", "evidence": "Illustrative: publisher found, external consumer behavior unresolved."}],
+        "estimates": null, "estimateBasis": "Not sized because the retained contract is unknown.", "includeInTotal": false, "countNote": "Unresolved and unsized; unknown is not zero."
+      }
+    ],
+    "coverage": [
+      {"area": "Category pipeline", "disposition": "A · Remove", "basis": "Illustrative: producer and all local readers inspected."},
+      {"area": "Progress persistence", "disposition": "B · Collapse", "basis": "Illustrative: writers, native owner, and UI reader inspected."},
+      {"area": "Recovery and authorization", "disposition": "C · Keep", "basis": "Illustrative: required guarantees; owners identified."},
+      {"area": "External delivery", "disposition": "D · Unresolved", "basis": "Illustrative: subscribers not inspected; excluded from recommendation."}
+    ],
+    "decisions": ["Is category arrival with the final finding acceptable for A?", "Is the direct native progress view in B sufficient, or is a custom label a real requirement?", "Trace D's external consumers before deciding whether to remove it."],
+    "limitations": "All paths, counts, requirements, and findings in this template are illustrative. A real review must replace them with revision-specific evidence. Estimates describe proposed changes, not a completed diff."
+  }
+  </script>
+  <script>
+    const root = document.getElementById('report');
+    const number = new Intl.NumberFormat('en-US');
+    const range = ([low, high]) => low === high ? number.format(low) : `${number.format(low)}–${number.format(high)}`;
+    const net = estimate => [estimate.removed[0] - estimate.added[1], estimate.removed[1] - estimate.added[0]];
+    function element(tag, text, className) {
+      const node = document.createElement(tag);
+      if (text !== undefined && text !== null) node.textContent = text;
+      if (className) node.className = className;
+      return node;
+    }
+    function section(title) {
+      const node = element('section'); node.append(element('h2', title)); root.append(node); return node;
+    }
+    function paragraph(parent, title, text) {
+      const block = element('div'); block.append(element('h3', title), element('p', text)); parent.append(block);
+    }
+    function list(parent, values) {
+      const node = element('ul'); values.forEach(value => node.append(element('li', value))); parent.append(node);
+    }
+    function table(parent, headings, rows) {
+      const wrap = element('div', null, 'scroll'); const node = element('table');
+      const head = element('thead'); const tr = element('tr');
+      headings.forEach(label => { const th = element('th', label); th.scope = 'col'; tr.append(th); }); head.append(tr);
+      const body = element('tbody');
+      rows.forEach(row => { const tr = element('tr'); row.forEach(value => { const td = element('td'); td.append(value instanceof Node ? value : document.createTextNode(value)); tr.append(td); }); body.append(tr); });
+      node.append(head, body); wrap.append(node); parent.append(wrap); return node;
+    }
+    function sourceLink(source) {
+      const label = element('code', source.label);
+      if (!source.url) return label;
+      try {
+        const url = new URL(source.url);
+        if (!['https:', 'http:'].includes(url.protocol)) return label;
+        const link = element('a'); link.href = url.href; link.append(label); return link;
+      } catch { return label; }
+    }
+    function validate(data) {
+      const ids = new Set();
+      for (const p of data.proposals) {
+        if (!/^[A-Za-z0-9_-]+$/.test(p.id) || ids.has(p.id)) throw new Error('Use unique proposal IDs containing letters, numbers, underscores, or hyphens.');
+        ids.add(p.id);
+        if (!['recommend', 'conditional', 'keep'].includes(p.recommendation)) throw new Error(`Unknown recommendation for ${p.id}.`);
+        if (typeof p.includeInTotal !== 'boolean') throw new Error(`Set includeInTotal explicitly for ${p.id}.`);
+        if (p.includeInTotal && (p.recommendation !== 'recommend' || !p.estimates?.length)) throw new Error(`Only sized, recommended proposals belong in totals: ${p.id}.`);
+        const categories = new Set();
+        for (const e of p.estimates ?? []) {
+          if (!['production', 'tests', 'docs', 'examples', 'generated', 'vendored', 'lockfiles'].includes(e.category)) throw new Error(`Unknown code category for ${p.id}: ${e.category}.`);
+          if (categories.has(e.category)) throw new Error(`Combine duplicate estimate categories for ${p.id}.`);
+          categories.add(e.category);
+          for (const pair of [e.removed, e.added]) if (!Array.isArray(pair) || pair.length !== 2 || !pair.every(n => Number.isSafeInteger(n) && n >= 0) || pair[0] > pair[1]) throw new Error(`Invalid estimate range for ${p.id}.`);
+        }
+      }
+      const included = new Set(data.proposals.filter(p => p.includeInTotal).map(p => p.id));
+      for (const p of data.proposals) {
+        for (const id of [...(p.overlapsWith ?? []), ...(p.requires ?? [])]) if (!ids.has(id) || id === p.id) throw new Error(`Invalid related proposal ${id} for ${p.id}.`);
+        if (!p.includeInTotal) continue;
+        for (const id of p.overlapsWith ?? []) if (included.has(id)) throw new Error(`Bundle overlaps: ${p.id} and ${id}. Combine the shared deletion or exclude an alternative.`);
+        for (const id of p.requires ?? []) if (!included.has(id)) throw new Error(`Bundle is missing ${p.id}'s prerequisite ${id}.`);
+      }
+    }
+    function renderReport(data) {
+      validate(data); root.replaceChildren(); document.title = `${data.title} · Architecture review`;
+      if (data.example) root.append(element('p', 'Illustrative template · Fictional paths and estimates. Replace with repository evidence before sharing a review.', 'notice'));
+      const header = element('header'); const eyebrow = element('div', null, 'eyebrow');
+      eyebrow.append(element('span', 'Simplify / Architecture review'), element('span', data.repository));
+      header.append(eyebrow, element('h1', data.title), element('p', data.summary, 'lead'));
+      const meta = element('dl', null, 'meta');
+      for (const [label, value] of [['Comparison base', data.base], ['Reviewed head · sizing baseline', data.head], ['Scope', data.scope]]) { const pair = element('div'); pair.append(element('dt', label), element('dd', value)); meta.append(pair); }
+      header.append(meta); root.append(header);
+      const included = data.proposals.filter(p => p.includeInTotal);
+      const excluded = data.proposals.filter(p => !p.includeInTotal);
+      const totals = new Map();
+      for (const p of included) for (const e of p.estimates) {
+        const total = totals.get(e.category) ?? { removed: [0, 0], added: [0, 0] };
+        [0, 1].forEach(i => { total.removed[i] += e.removed[i]; total.added[i] += e.added[i]; }); totals.set(e.category, total);
+      }
+      const metrics = element('div', null, 'metrics'); const reduction = element('div'); const bundle = element('div');
+      reduction.append(element('span', 'Estimated production reduction', 'kicker'), element('span', totals.has('production') ? `${range(net(totals.get('production')))} lines` : 'Not estimated', 'big'), element('small', 'Proposed range after replacement code. Negative reduction means growth.'));
+      bundle.append(element('span', 'Included bundle', 'kicker'), element('span', included.map(p => p.id).join(' + ') || 'None', 'big'), element('small', 'Compatible, disjoint proposals only. Inclusion is a recommendation, not approval.'));
+      metrics.append(reduction, bundle); root.append(metrics);
+      const omitted = excluded.filter(p => p.recommendation === 'recommend');
+      if (omitted.length) root.append(element('p', `Partial estimate · recommended proposals ${omitted.map(p => p.id).join(', ')} are excluded. See their count notes below.`, 'notice'));
+      const requirements = section('Requirements and assumptions');
+      requirements.append(element('h3', 'Required outcomes and contracts')); list(requirements, data.requirements);
+      if (data.assumptions?.length) { requirements.append(element('h3', 'Observed behavior to challenge')); list(requirements, data.assumptions); }
+      const architecture = section('Current → proposed');
+      for (const [key, label] of [['current', 'Current · observed at the reviewed head'], ['proposed', 'Proposed · subject to the decisions below']]) {
+        const model = data.architecture[key];
+        const figure = element('figure'); figure.append(element('h3', label), element('p', model.entry, 'muted'));
+        for (const lane of model.lanes) {
+          figure.append(element('h4', lane.label)); const flow = element('ol', null, 'flow');
+          for (const n of lane.nodes) { const li = element('li', null, ['remove', 'collapse'].includes(n.state) ? n.state : ''); li.append(element('strong', n.name), element('small', n.detail)); flow.append(li); }
+          figure.append(flow);
+        }
+        figure.append(element('figcaption', model.note)); architecture.append(figure);
+      }
+      architecture.append(element('p', data.diagramNote, 'muted'));
+      const overview = section('Proposals at a glance');
+      table(overview, ['Proposal', 'Recommendation', 'Production reduction', 'Confidence'], data.proposals.map(p => {
+        const link = element('a', `${p.id} · ${p.title}`); link.href = `#proposal-${p.id}`;
+        link.addEventListener('click', () => { document.getElementById(`proposal-${p.id}`).open = true; });
+        const e = p.estimates?.find(e => e.category === 'production');
+        return [link, element('span', p.recommendation, `badge ${p.recommendation}`), e ? `≈ ${range(net(e))}` : p.recommendation === 'keep' ? 'No deletion proposed' : 'Not estimated', p.confidence];
+      }));
+      const estimates = section('What the estimate includes');
+      estimates.append(element('p', 'Ranges are rough estimates, not a completed diff. Totals include only the bundle above; they do not add every idea in this report.', 'muted'));
+      const totalTable = table(estimates, ['Code category', 'Gross deletions', 'Expected additions', 'Net reduction'], [...totals].map(([category, e]) => [category, range(e.removed), range(e.added), range(net(e))]));
+      totalTable.querySelectorAll('tr').forEach(tr => [...tr.children].slice(1).forEach(cell => cell.classList.add('numeric')));
+      if (!totals.size) estimates.append(element('p', 'No compatible, sized bundle has been established.'));
+      if (excluded.length) { estimates.append(element('h3', 'Outside the total')); list(estimates, excluded.map(p => `${p.id} · ${p.countNote}`)); }
+      const chartData = included.map(p => ({ p, e: p.estimates.find(e => e.category === 'production') })).filter(item => item.e);
+      const max = Math.max(1, ...chartData.flatMap(({ e }) => [e.removed[1], e.added[1]]));
+      if (chartData.length) {
+        estimates.append(element('p', `Production code · shared scale 0–${number.format(max)} lines. Solid bars show the lower estimate; pale extensions show the upper estimate.`, 'chart-key'));
+        const chart = element('div', null, 'chart');
+        for (const { p, e } of chartData) {
+          const row = element('div', null, 'chart-row'); row.append(element('strong', `${p.id} · ${p.title}`)); const bars = element('div');
+          for (const [label, pair, color] of [['Delete', e.removed, 'deleted'], ['Add', e.added, 'added']]) {
+            const bar = element('div', null, 'bar-row'); const track = element('div', null, 'track'); track.setAttribute('aria-hidden', 'true');
+            for (const [value, name] of [[pair[1], 'extent'], [pair[0], 'minimum']]) { const fill = element('span', null, `${name} ${color}`); fill.style.width = `${value / max * 100}%`; track.append(fill); }
+            bar.append(element('span', label), track, element('span', range(pair), 'bar-value')); bars.append(bar);
+          }
+          row.append(bars); chart.append(row);
+        }
+        estimates.append(chart);
+      }
+      const proposals = section('Evidence and tradeoffs');
+      for (const p of data.proposals) {
+        const detail = element('details'); detail.id = `proposal-${p.id}`;
+        const summary = element('summary', `${p.id} · ${p.title}`); summary.append(element('span', p.recommendation, `badge ${p.recommendation}`));
+        const body = element('div', null, 'proposal'); const columns = element('div', null, 'columns');
+        for (const [title, value] of [['Why remove or retain it', p.why], ['Strongest case for keeping it', p.keepArgument], ['Smaller replacement / retained owner', p.replacement], ['Behavior preserved', p.preserves]]) paragraph(columns, title, value);
+        body.append(columns); paragraph(body, 'Tradeoff or decision', p.tradeoff); body.append(element('h3', 'Evidence'));
+        const evidence = element('ul', null, 'evidence'); for (const source of p.evidence) { const li = element('li'); li.append(sourceLink(source), element('small', source.evidence)); evidence.append(li); } body.append(evidence);
+        if (p.estimates?.length) table(body, ['Estimate category', 'Delete', 'Add', 'Net reduction'], p.estimates.map(e => [e.category, range(e.removed), range(e.added), range(net(e))]));
+        paragraph(body, 'Estimate basis and overlap', `${p.estimateBasis} ${p.countNote}`);
+        if (p.overlapsWith?.length) body.append(element('p', `Overlaps with: ${p.overlapsWith.join(', ')}.`));
+        if (p.requires?.length) body.append(element('p', `Requires: ${p.requires.join(', ')}.`));
+        paragraph(body, 'Confidence', p.confidence); paragraph(body, 'Checks before completion', p.verification);
+        detail.append(summary, body); proposals.append(detail);
+      }
+      const coverage = section('Coverage and retained machinery'); table(coverage, ['Area inspected', 'Disposition', 'Evidence / limit'], data.coverage.map(c => [c.area, c.disposition, c.basis]));
+      const decisions = section('Decisions for the reviewer'); list(decisions, data.decisions);
+      root.append(element('footer', data.limitations));
+    }
+    try { renderReport(JSON.parse(document.getElementById('review-data').textContent)); }
+    catch (error) { root.replaceChildren(element('h1', 'Review data needs attention'), element('p', error.message)); }
+    let closedForPrint = [];
+    addEventListener('beforeprint', () => { closedForPrint = [...root.querySelectorAll('details:not([open])')]; closedForPrint.forEach(node => { node.open = true; }); });
+    addEventListener('afterprint', () => { closedForPrint.forEach(node => { node.open = false; }); });
+  </script>
+</body>
+</html>
