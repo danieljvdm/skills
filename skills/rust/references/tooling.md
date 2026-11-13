@@ -6,6 +6,10 @@ Use repository task entrypoints when available. Otherwise select the affected pa
 
 Cargo features are unified across dependency edges. Verify changed feature behavior in the supported configurations; `--all-features` can hide a missing feature gate or combine incompatible backends. Use `--no-default-features` only for configurations the crate supports. `cargo tree -e features -i <dependency>` explains who enabled a feature. See the [Cargo features reference](https://doc.rust-lang.org/cargo/reference/features.html).
 
+Design optional features to add capability without disabling existing behavior. Feature unification means another dependent can enable a feature even when one edge disables defaults. Keep platform, runtime, and `no_std` support explicit. Resolve versions and syntax against the project's toolchain rather than upgrading the edition, MSRV, or dependency graph as a side effect of a code change.
+
+For setup work, start with the smallest useful crate structure. Use workspace inheritance where members genuinely share policy, and keep Cargo's resolver and feature behavior explicit. Split crates for a real dependency, compilation, reuse, or ownership boundary; a prescribed folder tree or one crate per module is not the objective.
+
 ## Keep the feedback loop focused
 
 The commands below are options, not a checklist to run on every edit. Apply the repository's lockfile and feature policy to the selected command.
@@ -24,10 +28,4 @@ Reuse [nextest](https://nexte.st/docs/running/) when the repository uses it for 
 
 When tests are warranted under the existing testing policy, assert the observable contract. Several assertions can describe one behavior. [Insta](https://insta.rs/) is useful for stable structured output with meaningful diffs; review changes against the intended result before accepting snapshots. [cargo-mutants](https://mutants.rs/) can investigate a concrete gap in test effectiveness. Neither tool is an automatic dependency or mandatory gate.
 
-## Performance and unsafe code
-
-When performance work is in scope, use the existing measurement workflow and representative optimized builds. Check the benchmark profile, features, workload, and whether setup or I/O dominates before changing an allocation, dispatch, or iterator choice. `cargo bench` uses the bench profile; inspect overrides rather than blindly adding flags. [The Rust Performance Book](https://nnethercote.github.io/perf-book/profiling.html) covers profiling and symbol information, including samply on macOS and flamegraph on supported platforms.
-
-Profile the work that limits the outcome. Clones, intermediate collections, generic code size, and allocations are hypotheses to investigate, not proof of a bottleneck. Keep a loop when it makes control flow clearer; an iterator chain is not intrinsically faster. Report only the improvement the comparison establishes.
-
-Unsafe code needs the relevant validity, aliasing, lifetime, and synchronization invariants stated at its safe boundary and justified at each unsafe operation. Checking pointer nullness or adding `repr(C)` alone does not establish those invariants. Consult the [Rust Reference on undefined behavior](https://doc.rust-lang.org/reference/behavior-considered-undefined.html). When changed unsafe behavior can be exercised, [Miri](https://github.com/rust-lang/miri) can detect classes of undefined behavior on executed paths; a passing run does not prove soundness, and unsupported FFI may need other evidence. Preserve repository unsafe policy and keep the unsafe surface small.
+For a public API change, verify from a consumer's perspective when that exposes a real uncertainty: imports, trait bounds, feature gates, or an executable example. A library's own tests can accidentally rely on private visibility or dev-dependency features. Choose an existing integration test, doctest, or small temporary consumer as appropriate; this is not a requirement to add a new permanent harness.

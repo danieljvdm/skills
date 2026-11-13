@@ -1,6 +1,6 @@
 ---
 name: rust
-description: Write, review, or refactor Rust code; resolve ownership and API design decisions; and select Cargo checks for the affected crate.
+description: Write, review, or refactor Rust code, including ownership, public APIs, errors, async lifecycles, unsafe boundaries, Cargo checks, and performance.
 license: MIT
 metadata:
   source: "https://github.com/apollographql/skills/tree/9dda1397730370aeb8df4ff8f2015c34c86b5003/skills/rust-best-practices"
@@ -16,11 +16,12 @@ Name the ownership and failure boundaries before changing types. Borrow when the
 
 Read only the reference needed for the decision:
 
-- Ownership, domain types, dispatch, public APIs, or error boundaries: [API and ownership](references/api-and-ownership.md).
-- Cargo features, diagnostics, tests, profiling, or unsafe verification: [tooling](references/tooling.md).
+- Ownership, domain types, dispatch, or public API compatibility: [API and ownership](references/api-and-ownership.md).
+- Error contracts, panics, unsafe abstractions, or FFI: [errors and safety](references/errors-and-safety.md).
+- Async tasks, shared state, cancellation, or shutdown: [async and resources](references/async-and-resources.md).
+- Cargo features, diagnostics, test selection, or crate configuration: [tooling](references/tooling.md).
+- Allocation, CPU, contention, future size, or an optimization claim: [performance](references/performance.md).
 
 Repository policy and the active testing, debugging, and performance workflows govern those activities. This skill supplies Rust-specific guidance; it does not require new tests, benchmarks, dependencies, or a replacement project layout for ordinary changes. Run the repository's required checks and the focused checks that establish the changed behavior. State which feature/target configuration was verified when that limits the result.
 
-Use the [Rust API Guidelines](https://rust-lang.github.io/api-guidelines/) for idiomatic public contracts and [Microsoft's Pragmatic Rust Guidelines](https://microsoft.github.io/rust-guidelines/) for deeper design questions. Consult the relevant chapter rather than loading the complete books. Runtime-specific behavior, including Tokio cancellation and shutdown, follows the installed runtime's documentation.
-
-Adaptation history and upstream terms are in [NOTICE](NOTICE) and [LICENSE](LICENSE).
+The references distill Apollo's Rust practices, [Microsoft's Pragmatic Rust Guidelines](https://microsoft.github.io/rust-guidelines/), and the [Rust API Guidelines](https://rust-lang.github.io/api-guidelines/) into decisions for this stack. Use their linked chapters to resolve a deeper question, and the installed crate documentation for version-sensitive details. Upstream preferences about panic recovery, error representation, runtimes, allocators, or project layout are not blanket project requirements.
