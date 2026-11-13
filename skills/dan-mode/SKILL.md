@@ -35,6 +35,7 @@ Use independent agents when parallel coverage or competing approaches will mater
 - Cloudflare runtime or CLI: [cloudflare](../cloudflare/SKILL.md).
 - Traces, logs, metrics, and exporter wiring: [o11y](../o11y/SKILL.md).
 - Effect services, schemas, or runtime integration: [effect](../effect/SKILL.md).
+- Rust implementation, API design, async lifecycles, or Cargo checks: [rust](../rust/SKILL.md).
 - Infrastructure and temporary test stacks: [alchemy](../alchemy/SKILL.md).
 - Repository or workspace setup and Vite+ tooling: [project-setup](../project-setup/SKILL.md).
 - Test selection, design, or explicitly requested TDD: [testing](../testing/SKILL.md).

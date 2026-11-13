@@ -17,6 +17,7 @@ Start with [dan-mode](skills/dan-mode/SKILL.md) for the personal working style: 
 | [o11y](skills/o11y/SKILL.md) | Tracing, Maple, Cloudflare signals, and Effect OTLP |
 | [cloudflare](skills/cloudflare/SKILL.md) | Workers, Durable Objects, and CLI use |
 | [effect](skills/effect/SKILL.md) | Effect architecture, APIs, and runtime integration |
+| [rust](skills/rust/SKILL.md) | Rust APIs, ownership, async lifecycles, safety, and verification |
 | [alchemy](skills/alchemy/SKILL.md) | Infrastructure and temporary test resources |
 | [project-setup](skills/project-setup/SKILL.md) | Repository setup and Vite+ tooling |
 | [testing](skills/testing/SKILL.md) | Test selection and design |
