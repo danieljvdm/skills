@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rust"
+  short_description: "Rust ownership, API design, and focused Cargo checks"
+  default_prompt: "Use $rust for this Rust change, preserving the crate's contracts and loading only the relevant API or tooling reference."

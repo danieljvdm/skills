@@ -1,0 +1,13 @@
+Rust skill
+
+Adapted from Apollo GraphQL's rust-best-practices skill at revision 9dda1397730370aeb8df4ff8f2015c34c86b5003:
+https://github.com/apollographql/skills/tree/9dda1397730370aeb8df4ff8f2015c34c86b5003/skills/rust-best-practices
+Copyright (c) 2024 Apollo Graph, Inc. MIT terms are retained in LICENSE.
+
+Microsoft's Pragmatic Rust Guidelines and the Rust API Guidelines informed the design and remain linked reference authorities rather than vendored manuals:
+https://github.com/microsoft/rust-guidelines/tree/9585e288d21d2da994a0550c926a09b62d79f8bd
+https://rust-lang.github.io/api-guidelines/
+
+The adaptation retains selective reference loading and ownership, error, and tooling guidance. It replaces fixed Copy-size thresholds, blanket panic restrictions, one-assertion preferences, and restricted dynamic-dispatch rules with decisions based on the actual contract. Existing testing and performance policies govern when extra checks are warranted. Tool choices remain conditional, and repository/MSRV constraints take precedence over upstream defaults. Async runtime guidance remains in the installed runtime's documentation until a focused reference is justified.
+
+Adaptation copyright (c) 2026 danieljvdm, under the repository's MIT license.
