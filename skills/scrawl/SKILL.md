@@ -3,8 +3,8 @@ name: scrawl
 description: Read and dig into Scrawl screen captures, where someone recorded their screen while talking, clicking and drawing red marks on it. Use whenever a message contains a Scrawl capture (a line like `[scrawl 0:12 · App “Window” · /path/to/….scrawl]`, a `.scrawl` bundle path, or a contact-sheet.png from one), when the user says "look at my scrawl" or refers to something they just recorded or drew, or when you need the `scrawl` CLI to zoom into a moment, pull frames, send a capture to a session, or export one as video.
 license: MIT
 metadata:
-  source: https://github.com/kitlangton/scrawl/tree/6c151a0ee988d839a6e69a5b3a38907fff74b81a/skills/scrawl
-  source_commit: 6c151a0ee988d839a6e69a5b3a38907fff74b81a
+  source: https://github.com/kitlangton/scrawl/tree/e3891889beafc19db95e6376f2415089a78dd843/skills/scrawl
+  source_commit: e3891889beafc19db95e6376f2415089a78dd843
 ---
 
 # Scrawl captures
@@ -48,7 +48,7 @@ Other files: `scrawl.json` is the full manifest (keyframes, `marks` with shape a
 
 ## The scrawl CLI
 
-`scrawl` is the Scrawl app's own binary. If `command -v scrawl` finds nothing, use `/Applications/Scrawl.app/Contents/MacOS/scrawl` (or the same path under `~/Applications`), and tell the person they can put it on PATH with Install in Scrawl's Settings › Agents. It runs only on the Mac with Scrawl installed. Anywhere else, read `contact-sheet.png`, `frames/` and `scrawl.json` directly. Every command takes a bundle path, and most default to `latest`, the newest capture. Quote the path, because it usually contains `Application Support`.
+`scrawl` is the Scrawl app's own binary. If `command -v scrawl` finds nothing, use `/Applications/Scrawl.app/Contents/MacOS/scrawl` (or the same path under `~/Applications`), and tell the person they can put it on PATH with Install in Scrawl's Settings › Agents & API (Agents on Windows). It runs only on the Mac with Scrawl installed. Anywhere else, read `contact-sheet.png`, `frames/` and `scrawl.json` directly. Every command takes a bundle path, and most default to `latest`, the newest capture. Quote the path, because it usually contains `Application Support`.
 
 ### Look closer at a moment
 

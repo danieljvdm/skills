@@ -2,14 +2,14 @@
   "repository": "https://github.com/kitlangton/scrawl.git",
   "branch": "main",
   "path": "skills/scrawl",
-  "commit": "6c151a0ee988d839a6e69a5b3a38907fff74b81a",
+  "commit": "e3891889beafc19db95e6376f2415089a78dd843",
   "upstream_hashes": {
     "LICENSE": "4994c24b5bbb85529407e8cd0211efcf819236899d2c911cbdb18c00f231273a",
-    "SKILL.md": "15cc63bf691ed3eec80878059669f6b92a9f454eed8bfba447daab024ce445f9"
+    "SKILL.md": "bf707430fa1aa8636422a0637c96d849d08ff3da58ddad82ba181f6398b9f477"
   },
   "installed_hashes": {
     "LICENSE": "4994c24b5bbb85529407e8cd0211efcf819236899d2c911cbdb18c00f231273a",
-    "SKILL.md": "cb8a7d32ae16504a2f6e8ba1599c5a54e4e350669b356fe1c9579ef2e5dfd88b",
+    "SKILL.md": "aff7060964bbda0ab23b01154c2b3ebd5e88f32680fd6cf42aa1d71862041601",
     "agents/openai.yaml": "50f4ddbd0cdf097e164fadc2a5a72bc357ce8e895d6f5457fe0da2e328f86646"
   }
 }
